@@ -5,7 +5,7 @@
     <meta http-equiv="Pragma" content="no-store">
     <meta http-equiv="Cache-Control" content="no-store">
     <meta http-equiv="Expires" content="0">
-    <title>カメラ表示</title>
+    <title>Number Place</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       body {
@@ -13,104 +13,62 @@
         padding: 10px;
         font-family: sans-serif;
       }
-      dl {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 0 10px;
+      table {
+        width: 100%;
+        max-width: 720px;
+        border-collapse: collapse;
+        margin: auto;
       }
-      canvas {
-        display: block;
-        max-width: 100%;
-        height: auto;
-        margin: 20px auto;
-        border: 1px solid #ccc;
-        background: #fafafa;
+      th, td {
+        padding: 8px;
+        text-align: center;
+        word-break: break-word;
       }
-      label, input[type="file"] {
-        font-size: 1rem;
+      th {
+        background: #DDEEFF;
+        color: #555555;
       }
       @media (max-width: 600px) {
-        dl {
-          max-width: 100%;
-          padding: 0;
+        table, thead, tbody, th, td, tr {
+          display: block;
+          width: 100%;
         }
-        canvas {
-          width: 100vw !important;
-          max-width: 100vw;
-          height: auto !important;
+        th, td {
+          box-sizing: border-box;
+          width: 100%;
+          display: block;
         }
+        tr {
+          margin-bottom: 10px;
+        }
+      }
+      input[type="submit"] {
+        width: 100%;
+        min-width: 120px;
+        max-width: 180px;
+        height: 50px;
       }
     </style>
 </head>
-
 <body>
-	<dl>
-		<dt>ナンバープレースの問題を背面カメラで撮影してください</dt>
-		<dd>
-		  <div>
-		  <label>
-		    <input type="file" id="npimage" capture="environment" accept="image/*">
-		  </label>
-		  </div>
-		</dd>
-	</dl>	
-
-	<canvas id="canvas" width="1200" height="900"></canvas>
-	
-	<script>
-		var form = document.createElement('form');
-		var request = document.createElement('input');
-
-		const canvas = document.getElementById('canvas');
-		const context = canvas.getContext('2d');
-
-		form.method = 'POST';
-		form.action = '/camera';
-	
-		request.type = 'hidden'; //入力フォームが表示されないように
-		request.name = 'image';
-
-		// input要素
-		const fileInput = document.getElementById('npimage');
-
-		var img = new Image();
-
-		// changeイベントで呼び出す関数
-		const handleFileSelect = () => {
-			const files = fileInput.files;
-			for (let i = 0; i < files.length; i++) {
-				console.log(files[i]); // 1つ1つのファイルデータはfiles[i]で取得できる
-			}
-			let reader = new FileReader();
-			reader.readAsDataURL(files[0]);		
-			reader.onload = () => {
-				img.src = reader.result;
-			}
-		}
-		img.onload = function(){			
-			// 元画像サイズ
-			const imgWidth = img.width;
-			const imgHeight = img.height;
-			const maxLen = Math.max(imgWidth, imgHeight);
-
-			// 長辺が800を超えないようにcanvasサイズを調整
-			let scale = 1;
-			if (maxLen > 800) {
-				scale = 800 / maxLen;
-			}
-			canvas.width = Math.round(imgWidth * scale);
-			canvas.height = Math.round(imgHeight * scale);
-
-			context.drawImage(img, 0, 0, canvas.width, canvas.height);
-			const base64_img = canvas.toDataURL("image/jpeg");
-			request.value = base64_img;
-			form.appendChild(request);
-			document.body.appendChild(form);
-			form.submit();
-		}
-		// ファイル選択時にhandleFileSelectを発火
-		fileInput.addEventListener('change', handleFileSelect);
-	</script>
-
+  <table border="1" cellspacing="0" cellpadding="5" bordercolor="#FFFFFF">
+    <tr>
+      <th>問題の入力方法</th>
+    </tr>
+    <form action="" method="post">
+      <tr>
+        <td>
+          <input type="submit" name="process" value="手入力">
+        </td>
+      </tr>
+    </form>
+    <form action="" method="post">
+      <tr>
+        <td>
+          <input type="submit" name="process" value="カメラ撮影">
+        </td>
+      </tr>
+    </form>
+  </table>
 </body>
 </html>

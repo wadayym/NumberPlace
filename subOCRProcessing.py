@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 import subImageProcessClass as subIP
-import subNumberPlaceRevised as subNP
+import subNumberPlace as subNP
 import subONNX as subOnnx
 
 def find_square(s_file, r_file):
