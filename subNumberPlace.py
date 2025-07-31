@@ -10,8 +10,26 @@ class NumberPlace:
     def get(self): 
         return self.number_table, self.input_table
     
+    def pre_check(self):
+        self.input_table = np.copy(self.number_table)  
+        for i in range(9):
+            for j in range(9):
+                if self.input_table[i][j] != 0:
+                    k = self.input_table[i][j]
+                    self.input_table[i][j] = 0
+                    if not self.check3(i, j, k):
+                        self.input_table[i][j] = k
+                        print("pre_check failed at ({}, {}) with value {}".format(i, j, k))
+                        return False
+                    self.input_table[i][j] = k
+        print("pre_check passed")
+        return True
+    
     def check_all(self):
-        self.input_table = np.copy(self.number_table)         
+        self.input_table = np.copy(self.number_table)  
+        if not self.pre_check():
+            print("Input table is invalid.")
+            return False       
         self.set_order()
         print(self.number_table) 
         result = self.check(0)
