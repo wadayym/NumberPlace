@@ -9,7 +9,7 @@ import cv2
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 
 from subOCRProcessing import find_square
-from subNumberPlace import subNP
+import subNumberPlace as subNP
 
 print(sys.version)
 app = Flask(__name__)
@@ -93,6 +93,10 @@ def send():
     else:
         return redirect(url_for('numberplace'))
 
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOADED_PATH'], filename)
+    
 @app.route("/camera", methods=['POST', 'GET'])
 def capture():
     if request.method == 'POST':
@@ -103,6 +107,14 @@ def capture():
 @app.route('/result')
 def result():
     result_file_name = ps.process()
+    print("result_file_name:"+result_file_name)
+    if not os.path.exists(result_file_name):
+        print("Result file does not exist.")
+        return render_template('error.html', message="Result file not found.")
+    if not os.path.isfile(result_file_name):
+        print("Result file is not a file.")
+        return render_template('error.html', message="Result file is not a valid file.")
+    print("Result file exists and is a file.")
     return render_template('result.html', result_url = result_file_name)
 
 if __name__ == '__main__':
