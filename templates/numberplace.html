@@ -17,11 +17,15 @@
         padding: 0 10px;
       }
       table {
-        width: 100%;
+        border: 1px solid #888;
         border-collapse: collapse;
+        width: 100%;
+        max-width: 480px;
         margin: auto;
       }
       th, td {
+        border: 1px solid #888;
+        border-collapse: collapse;
         padding: 8px;
         text-align: center;
         word-break: break-word;
@@ -42,8 +46,19 @@
           max-width: 100%;
           padding: 0;
         }
-        table, th, td {
-          font-size: 0.9rem;
+        table {
+          border: 1px solid #888;
+          border-collapse: collapse;
+          width: 100%;
+          max-width: 480px;
+          margin: auto;
+        }
+        th, td {
+          border: 1px solid #888;
+          border-collapse: collapse;
+          padding: 4px;
+          text-align: center;
+          word-break: break-word;
         }
         select {
           font-size: 1rem;
@@ -60,9 +75,8 @@
 <body> 
 {% if not bComplete %}	
 <form method="post" action="/resolve" enctype="multipart/form-data">
-	<div style="width: 450px;margin-left: 20px;transform-origin: top left;transform: scale(1.5);">
-	<table border="1" rules="all" style="width:100%;padding: 10px;"> 
-	
+	<div>
+	<table> 
 		<!-- For loop logic of jinja template -->
 		{%for i in range(9)%} 
 		
@@ -70,9 +84,9 @@
 		<tr> 
 		  {%for j in range(9)%} 
 		  {% if ((i//3 + j//3) % 2) == 0 %}
-			<td align="center" valign="middle" bgcolor="#dddddd" style="padding: 8px;">
+			<td align="center" valign="middle" bgcolor="#dddddd">
 		  {% else %}
-		    <td align="center" valign="middle" bgcolor="#ffffff" style="padding: 8px;">
+		  <td align="center" valign="middle" bgcolor="#ffffff">
 		  {% endif %}			
 				<select id={{PlaceName[i][j]}} name={{PlaceName[i][j]}}>
 					<option selected>0</option>
@@ -86,15 +100,19 @@
 		{%endfor%} 
 		
 	</table> 
-	<input type="submit" value="解く" class="btn" style="width:100%;padding: 10px;" >
 	</div>
+  
+  <div style="display: flex; justify-content: center;">
+    <input type="submit" value="解く" class="btn" style="width:180px; padding:10px;">
+  </div>
+
 </form>
 {% endif %}	  
 
 {% if bComplete %}
 <form method="post" action="/numberplace" enctype="multipart/form-data">
-	<div style="width: 450px;margin-left: 20px;transform-origin: top left;transform: scale(1.5);">
-	<table border="1" rules="all" style="width:100%;padding: 10px;"> 
+	<div>
+	<table> 
 		
 	<!-- For loop logic of jinja template -->
 	{%for i in range(9)%} 
@@ -125,8 +143,12 @@
 	{%endfor%} 
 
 	</table> 
-	<input type="submit" value="クリア" class="btn" style="width:100%;padding: 10px;">
 	</div>
+
+  <div style="display: flex; justify-content: center;">
+    <input type="submit" value="クリア" class="btn" style="width:180px; padding:10px;">
+  </div>
+
 </form>
 {% endif %}
 

@@ -82,12 +82,12 @@ def numberplace():
 @app.route('/resolve', methods=['GET', 'POST'])
 def send():
     if request.method == 'POST':
-        numberPlace = subNP()
+        NPClass = subNP.NumberPlace()
         for i in range(9):
             for j in range(9):
-                numberPlace.set(i, j, int(request.form[PlaceName[i][j]]))
-        numberPlace.check_all()
-        outTable, inTable = numberPlace.get()
+                NPClass.set(i, j, int(request.form[PlaceName[i][j]]))
+        NPClass.check_all()
+        outTable, inTable = NPClass.get()
         bComplete = True
         return render_template('numberplace.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable, bComplete = bComplete)
     else:
