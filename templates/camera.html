@@ -5,18 +5,13 @@
     <meta http-equiv="Pragma" content="no-store">
     <meta http-equiv="Cache-Control" content="no-store">
     <meta http-equiv="Expires" content="0">
-    <title>カメラ表示</title>
+    <title>upload</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       body {
         margin: 0;
         padding: 10px;
         font-family: sans-serif;
-      }
-      dl {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 0 10px;
       }
       canvas {
         display: block;
@@ -30,10 +25,6 @@
         font-size: 1rem;
       }
       @media (max-width: 600px) {
-        dl {
-          max-width: 100%;
-          padding: 0;
-        }
         canvas {
           width: 100vw !important;
           max-width: 100vw;
@@ -44,20 +35,55 @@
 </head>
 
 <body>
-	<dl>
-		<dt>ナンバープレースの問題をカメラで撮影してください</dt>
-		<dd>
-		  <div>
-		  <label>
-		    <input type="file" id="npimage" capture="environment" accept="image/*">
-		  </label>
-		  </div>
-		</dd>
-	</dl>	
+	<div style="
+			display:flex; 
+			justify-content:center; 
+			align-items:center; 
+			flex-direction:column;
+			margin: 20px auto;
+			">			
+		<label for="npimage" id="customLabel" style="
+			display:inline-block;
+			padding:10px 15px;
+			background-color:#06d;
+			color:#fff;
+			border-radius:10px;
+			cursor:pointer;
+			text-align: center;
+			">
+			画像をアップロードしてください
+		</label>
+		<input type="file" id="npimage" capture="environment" accept="image/*" style="display:none;">			
+	</div>
 
-	<canvas id="canvas" width="1200" height="900"></canvas>
+	<canvas id="canvas" width="800" height="800"></canvas>
 	
 	<script>
+		const label = document.getElementById('customLabel');
+
+		if (navigator.userAgentData) {
+			if (navigator.userAgentData.mobile) {
+				label.textContent = 'カメラで撮影してください';
+				console.log("Mobile device detected (userAgentData)");
+				// スマホ向け処理
+			} else {
+				 label.textContent = '画像ファイルを選択してください';
+				console.log("Desktop device detected (userAgentData)");
+				// PC向け処理
+			}
+		}
+		else if (/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+			label.textContent = 'カメラで撮影してください';
+			console.log("Mobile device detected (userAgent)");
+			// スマホ向け処理
+		} else {
+			label.textContent = '画像ファイルを選択してください';
+			console.log("Desktop device detected (userAgent)");
+			// PC向け処理
+		}
+
+
+
 		var form = document.createElement('form');
 		var request = document.createElement('input');
 
