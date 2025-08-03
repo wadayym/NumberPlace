@@ -69,7 +69,7 @@ def index():
         if ps.get_process_name() =='手入力':
             return redirect('/numberplace')
 
-        if ps.get_process_name() == "カメラ撮影":
+        if ps.get_process_name() == "画像入力":
             return render_template('camera.html')
         
     return render_template('index.html')
