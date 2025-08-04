@@ -63,8 +63,12 @@
     </style>
 </head>
 
-<body> 
-{% if not bComplete %}	
+<body>
+<div class="container">
+  <h1>Number Place</h1>
+  <p>各セルに数字を入力してください。</p>
+  <p>0は空欄を表します。</p>
+  <p>解くボタンを押すと、解答が表示されます。</p>
 <form method="post" action="/resolve" enctype="multipart/form-data">
 	<div>
 	<table> 
@@ -75,9 +79,9 @@
 		<tr> 
 		  {%for j in range(9)%} 
 		  {% if ((i//3 + j//3) % 2) == 0 %}
-			<td align="center" valign="middle" bgcolor="#dddddd">
+			<td align="center" valign="middle" bgcolor="#dddddd" style="padding: 8px;">
 		  {% else %}
-		  <td align="center" valign="middle" bgcolor="#ffffff">
+		  <td align="center" valign="middle" bgcolor="#ffffff" style="padding: 8px;">
 		  {% endif %}			
 				<select id={{PlaceName[i][j]}} name={{PlaceName[i][j]}}>
 					<option selected>0</option>
@@ -98,50 +102,7 @@
   </div>
 
 </form>
-{% endif %}	  
 
-{% if bComplete %}
-<form method="post" action="/numberplace" enctype="multipart/form-data">
-	<div>
-	<table> 
-		
-	<!-- For loop logic of jinja template -->
-	{%for i in range(9)%} 
-
-	<!-- table rows -->
-	<tr> 
-	{%for j in range(9)%} 
-
-	{% if ((i//3 + j//3) % 2) == 0 %}
-		<td align="center" valign="middle" bgcolor="#dddddd" style="padding: 8px;">
-		{% if IN_Table[i][j] == 0 %}
-			{{NP_Table[i][j]}}</td> 
-		{% else %}
-			<b>{{NP_Table[i][j]}}</b></td> 
-		{% endif %}
-	{% else %}
-		<td align="center" valign="middle" bgcolor="#ffffff" style="padding: 8px;">
-		{% if IN_Table[i][j] == 0 %}
-			{{NP_Table[i][j]}}</td> 
-		{% else %}
-			<b>{{NP_Table[i][j]}}</b></td> 
-		{% endif %}
-    {% endif %}			
-
-	{%endfor%} 
-	</tr> 
-
-	{%endfor%} 
-
-	</table> 
-	</div>
-
-  <div style="display: flex; justify-content: center;">
-    <input type="submit" value="クリア" class="btn" style="width:180px; padding:10px;">
-  </div>
-
-</form>
-{% endif %}
 
 </body> 
 </html>
