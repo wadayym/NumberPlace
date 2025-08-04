@@ -89,7 +89,7 @@ def send():
         NPClass.check_all()
         outTable, inTable = NPClass.get()
         bComplete = True
-        return render_template('numberplace.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable, bComplete = bComplete)
+        return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable, bComplete = bComplete)
     else:
         return redirect(url_for('numberplace'))
 

@@ -23,12 +23,6 @@
         max-width: 480px;
         margin: auto;
       }
-      select {
-        padding: 8px;
-        font-size: 16px;
-        border-radius: 4px;
-        border: 1px solid #888;
-      }
       input[type="submit"] {
         width: 100%;
         min-width: 120px;
@@ -48,12 +42,6 @@
           max-width: 480px;
           margin: auto;
         }
-        select {
-          padding: 2px;
-          font-size: 12px;
-          border-radius: 1px;
-          border: 1px solid #888;
-        }
         input[type="submit"] {
           min-width: 100px;
           max-width: 100%;
@@ -64,44 +52,8 @@
 </head>
 
 <body> 
-{% if not bComplete %}	
-<form method="post" action="/resolve" enctype="multipart/form-data">
-	<div>
-	<table> 
-		<!-- For loop logic of jinja template -->
-		{%for i in range(9)%} 
-		
-		<!-- table rows -->
-		<tr> 
-		  {%for j in range(9)%} 
-		  {% if ((i//3 + j//3) % 2) == 0 %}
-			<td align="center" valign="middle" bgcolor="#dddddd">
-		  {% else %}
-		  <td align="center" valign="middle" bgcolor="#ffffff">
-		  {% endif %}			
-				<select id={{PlaceName[i][j]}} name={{PlaceName[i][j]}}>
-					<option selected>0</option>
-					{%for k in range(9)%} 
-					<option>{{k+1}}</option>
-					{%endfor%} 
-				</select>
-			</td> 
-		  {%endfor%} 
-		</tr> 
-		{%endfor%} 
-		
-	</table> 
-	</div>
-  
-  <div style="display: flex; justify-content: center;">
-    <input type="submit" value="解く" class="btn" style="width:180px; padding:10px;">
-  </div>
 
-</form>
-{% endif %}	  
-
-{% if bComplete %}
-<form method="post" action="/numberplace" enctype="multipart/form-data">
+<form method="post" action="/numberplace">
 	<div>
 	<table> 
 		
@@ -141,7 +93,5 @@
   </div>
 
 </form>
-{% endif %}
-
 </body> 
 </html>
