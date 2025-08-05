@@ -30,6 +30,14 @@
         text-align: center;
         word-break: break-word;
       }
+      .custom-select select {
+        appearance: none;
+        padding-right: 24px;
+        background: none;
+      }
+      .custom-select {
+        position: relative;
+      }
       select {
         padding: 8px;
         font-size: 16px;
@@ -95,13 +103,15 @@
 			<td align="center" valign="middle" bgcolor="#dddddd" style="padding: 8px;">
 		  {% else %}
 		  <td align="center" valign="middle" bgcolor="#ffffff" style="padding: 8px;">
-		  {% endif %}			
-				<select id={{PlaceName[i][j]}} name={{PlaceName[i][j]}}>
-					<option selected>0</option>
-					{%for k in range(9)%} 
-					<option>{{k+1}}</option>
-					{%endfor%} 
-				</select>
+		  {% endif %}
+        <div class="custom-select">    
+          <select id={{PlaceName[i][j]}} name={{PlaceName[i][j]}}>
+            <option selected>0</option>
+            {%for k in range(9)%} 
+            <option>{{k+1}}</option>
+            {%endfor%} 
+          </select>
+        </div>
 			</td> 
 		  {%endfor%} 
 		</tr> 
