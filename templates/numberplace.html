@@ -38,6 +38,14 @@
       .custom-select {
         position: relative;
       }
+      .selected {
+        padding: 10px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center; /* 横中央揃え */
+        height: 40px;
+      }
       select {
         padding: 8px;
         font-size: 16px;
@@ -70,8 +78,24 @@
           text-align: center;
           word-break: break-word;
         }
-        select {
+        .custom-select select {
+          appearance: none;
+          padding-right: 12px;
+          background: none;
+        }
+        .custom-select {
+          position: relative;
+        }
+        .selected {
           padding: 2px;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center; /* 横中央揃え */
+          height: 40px;
+        }
+        select {
+          padding: 1px;
           font-size: 12px;
           border-radius: 1px;
           border: 1px solid #888;
@@ -88,7 +112,7 @@
 <body>
 <div class="container">
   <h1>Number Place</h1>
-  <p>各セルに数字を入力してください。0は空欄を表します。</p>
+  <p>各セルに数字を入力してください。(0は空欄)</p>
   <p>解くボタンを押すと、解答が表示されます。</p>
 <form method="post" action="/resolve" enctype="multipart/form-data">
 	<div>
@@ -100,9 +124,9 @@
 		<tr> 
 		  {%for j in range(9)%} 
 		  {% if ((i//3 + j//3) % 2) == 0 %}
-			<td align="center" valign="middle" bgcolor="#dddddd" style="padding: 8px;">
+			<td align="center" valign="middle" bgcolor="#dddddd" style="padding: 2px;">
 		  {% else %}
-		  <td align="center" valign="middle" bgcolor="#ffffff" style="padding: 8px;">
+		  <td align="center" valign="middle" bgcolor="#ffffff" style="padding: 2px;">
 		  {% endif %}
         <div class="custom-select">    
           <select id={{PlaceName[i][j]}} name={{PlaceName[i][j]}}>
