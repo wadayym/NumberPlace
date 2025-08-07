@@ -75,8 +75,7 @@ def index():
 
 @app.route('/numberplace', methods=['POST', 'GET'])
 def numberplace():
-    bComplete = False
-    return render_template('numberplace.html', PlaceName = PlaceName, bComplete = bComplete)
+    return render_template('numberplace.html', PlaceName = PlaceName)
 
 @app.route('/solution', methods=['GET', 'POST'])
 def send():
@@ -87,7 +86,7 @@ def send():
                 NPClass.set(i, j, int(request.form[PlaceName[i][j]]))
         NPClass.check_all()
         outTable, inTable = NPClass.get()
-        return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable, bComplete = bComplete)
+        return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable)
     else:
         return redirect(url_for('numberplace'))
 
