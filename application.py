@@ -58,7 +58,6 @@ PlaceName = [['00'] * 9 for i in range(9)]
 for i in range(9):
     for j in range(9):
         PlaceName[i][j] = str(i * 10 + j)
-bComplete = False
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -79,7 +78,7 @@ def numberplace():
     bComplete = False
     return render_template('numberplace.html', PlaceName = PlaceName, bComplete = bComplete)
 
-@app.route('/resolve', methods=['GET', 'POST'])
+@app.route('/solution', methods=['GET', 'POST'])
 def send():
     if request.method == 'POST':
         NPClass = subNP.NumberPlace()
@@ -88,7 +87,6 @@ def send():
                 NPClass.set(i, j, int(request.form[PlaceName[i][j]]))
         NPClass.check_all()
         outTable, inTable = NPClass.get()
-        bComplete = True
         return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable, bComplete = bComplete)
     else:
         return redirect(url_for('numberplace'))
