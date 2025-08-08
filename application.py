@@ -26,7 +26,10 @@ class ProcessSettings:
         self.filename_result = ""
         self.filename_work = ""
     
-    def set(self, request):
+    def set(self):
+        print("request")
+        print(request.form)
+        print("process name:"+request.form['process'])
         self.process_name = request.form['process']
 
     def get_process_name(self):
@@ -69,11 +72,13 @@ def index():
     ac = request.endpoint
     print("endpoint:"+ac)
     if request.method == 'POST': 
-        ps.set(request)
+        ps.set()
         if ps.get_process_name() =='手入力':
+            print("process:"+"手入力")
             return redirect('/numberplace')
 
         if ps.get_process_name() == "画像入力":
+            print("process:"+"画像入力")
             ps.save_capture_image()
             return redirect('/result')
         
