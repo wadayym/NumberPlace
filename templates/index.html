@@ -176,11 +176,11 @@
 			}
 		}
 		else if (/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)) {
-			label.textContent = 'カメラで撮影してください';
+			label.textContent = '画像入力（カメラ撮影）';
 			console.log("Mobile device detected (userAgent)");
 			// スマホ向け処理
 		} else {
-			label.textContent = '画像ファイルを選択してください';
+			label.textContent = '画像入力（ファイル選択）';
 			console.log("Desktop device detected (userAgent)");
 			// PC向け処理
 		}
