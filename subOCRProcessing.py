@@ -6,7 +6,7 @@ import subImageProcessClass as subIP
 import subNumberPlace as subNP
 import subONNX as subOnnx
 
-def find_square(s_file, r_file):
+def find_square(s_file, r_file, w_file):
     IPClass = subIP.ImageProcess(s_file)
 
     # 輪郭の抽出
@@ -46,11 +46,15 @@ def find_square(s_file, r_file):
 
     # タイル状画像を描画
     NPClass.check_all()
-    number_table, input_table = NPClass.get()
+    result_table, input_table = NPClass.get()
     for j in range(9):
         for i in range(9):
             if input_table[j][i] == 0:
-                cv2.putText(tile_image, str(number_table[j][i]), tuple([i*70+17, j*70+55]), cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 64, 0), 5)
+                cv2.putText(tile_image, str(result_table[j][i]), tuple([i*70+17, j*70+55]), cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 64, 0), 5)
             else:
-                cv2.putText(tile_image, str(number_table[j][i]), tuple([i*70+50, j*70+65]), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (128, 0, 0), 3)
+                cv2.putText(tile_image, str(result_table[j][i]), tuple([i*70+50, j*70+65]), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (128, 0, 0), 3)
     cv2.imwrite(r_file, tile_image)
+    cv2.imwrite(w_file, imgTrandformed)
+
+    print("Processing completed. Result saved to:", r_file)
+    return result_table, input_table

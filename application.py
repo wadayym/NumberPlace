@@ -8,7 +8,7 @@ import numpy as np
 import cv2
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 
-from subOCRProcessing import find_square
+import subOCRProcessing as subOCR
 import subNumberPlace as subNP
 
 print(sys.version)
@@ -20,18 +20,32 @@ app.config.update(
 
 class ProcessSettings:
     def __init__(self):
-        self.filename_input = ""
         self.process_name = ""
+
+        self.filename_input = ""
+        self.filename_result = ""
+        self.filename_work = ""
     
     def set(self, request):
         self.process_name = request.form['process']
 
     def get_process_name(self):
         return self.process_name
-
+    
+    def get_filename_input(self):
+        return self.filename_input
+    
+    def get_filename_result(self):
+        return self.filename_result
+    
+    def get_filename_work(self):
+        return self.filename_work
+    
     def save_capture_image(self):
-        self.filename_input = os.path.join(app.config['UPLOADED_PATH'], datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')) + '_input.jpg'
-        #aram_dict['file_name'] = filename
+        filename = os.path.join(app.config['UPLOADED_PATH'], datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
+        self.filename_input = filename + '_input.jpg'
+        self.filename_result = filename + '_result.png'
+        self.filename_work = filename + '_work.png'
         base64_img = request.form['image']
         #print(type(base64_png))
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -45,13 +59,8 @@ class ProcessSettings:
         cv2.imwrite(self.filename_input, image_decoded)
 
     def process(self):
-        start_time = time.perf_counter()
-        filename_result = os.path.join(app.config['UPLOADED_PATH'], datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')) + '_result.png'
-        # ここで処理する
-        find_square(self.filename_input, filename_result)
-        current_time = time.perf_counter()
-        print("processing time = {:.3f}sec".format(current_time - start_time))
-        return filename_result
+
+        return True
     
 ps = ProcessSettings()
 PlaceName = [['00'] * 9 for i in range(9)]
@@ -86,9 +95,11 @@ def send():
                 NPClass.set(i, j, int(request.form[PlaceName[i][j]]))
         NPClass.check_all()
         outTable, inTable = NPClass.get()
+        if 0 in outTable:
+            print("Processing failed. Result contains zero.")
+            return render_template('error.html', message="解けませんでした。")
         return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable)
-    else:
-        return redirect(url_for('numberplace'))
+    return redirect(url_for('numberplace'))
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -103,16 +114,16 @@ def capture():
 
 @app.route('/result')
 def result():
-    result_file_name = ps.process()
-    print("result_file_name:"+result_file_name)
-    if not os.path.exists(result_file_name):
-        print("Result file does not exist.")
-        return render_template('error.html', message="Result file not found.")
-    if not os.path.isfile(result_file_name):
-        print("Result file is not a file.")
-        return render_template('error.html', message="Result file is not a valid file.")
-    print("Result file exists and is a file.")
-    return render_template('result.html', result_url = result_file_name)
+    start_time = time.perf_counter()
+    # ここで処理する
+    outTable, inTable = subOCR.find_square(ps.get_filename_input, ps.get_filename_result(), ps.get_filename_work)
+    current_time = time.perf_counter()
+    print("processing time = {:.3f}sec".format(current_time - start_time))
+    if 0 in outTable:
+        print("Processing failed. Result contains zero.")
+        return render_template('error.html', message="解けませんでした。", work_file=ps.get_filename_work())
+    print("Processing completed successfully.")
+    return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable)
 
 if __name__ == '__main__':
     for p in glob.glob(app.config['UPLOADED_PATH']+'/**', recursive=True):

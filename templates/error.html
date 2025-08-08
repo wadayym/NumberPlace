@@ -43,6 +43,9 @@
       {% else %}
       <p>エラーが発生しました。</p>
       {% endif %}
+      {% if work_file %}
+      <p><img src="{{ work_file }}"></p>
+      {% endif %}
     </div>
   </div>
 </body>
