@@ -187,7 +187,7 @@
 		}
 
     var form = document.getElementById('index');
-		var request = document.createElement('input');
+		var hiddenInput = document.createElement('input');
 
 		const canvas = document.getElementById('canvas');
 		const context = canvas.getContext('2d');
@@ -195,9 +195,12 @@
 		form.method = 'POST';
 		form.action = '';
 	
-		request.type = 'hidden'; //入力フォームが表示されないように
-		request.name = 'process';
-    request.value = '画像入力';
+		hiddenInput.type = 'hidden'; //入力フォームが表示されないように
+		hiddenInput.name = 'process';
+    hiddenInput.value = '画像入力';
+    form.appendChild(hiddenInput);
+
+    const request = document.createElement('input');
 		// input要素
 		const fileInput = document.getElementById('npimage');
 
@@ -232,6 +235,8 @@
 			context.drawImage(img, 0, 0, canvas.width, canvas.height);
 			const base64_img = canvas.toDataURL("image/jpeg");
 			request.value = base64_img;
+      request.type = 'hidden'; //入力フォームが表示されないように
+      request.name = 'image';      
 			form.appendChild(request);
 			document.body.appendChild(form);
 			form.submit();
