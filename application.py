@@ -27,8 +27,6 @@ class ProcessSettings:
         self.filename_work = ""
     
     def set(self):
-        print("request")
-        print(request.form)
         print("process name:"+request.form['process'])
         self.process_name = request.form['process']
 
@@ -106,13 +104,6 @@ def send():
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOADED_PATH'], filename)
-    
-@app.route("/camera", methods=['POST', 'GET'])
-def capture():
-    if request.method == 'POST':
-        ps.save_capture_image()
-        return redirect('/result')
-    return render_template('camera.html')
 
 @app.route('/result')
 def result():

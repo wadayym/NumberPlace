@@ -58,8 +58,7 @@
       td {
         background-color: transparent; /* ← 透明にする */
       }
-      input[type="submit"] {
-        width: 100%;
+      input {
         padding: 10px;
         font-size: 16px;
         color: #333;
@@ -67,6 +66,9 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
+        width: 100%;
+        min-width: 240px;
+        max-width: 300px;
       }
       /* コンテナのスタイル */
       .centered-container {
@@ -79,7 +81,6 @@
       /* カスタムラベルのスタイル */
       #customLabel {
         display: inline-block;
-        width: 100%;
         padding: 10px;
         font-size: 16px;
         color: #333;
@@ -87,7 +88,9 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        text-align: center;
+        width: 100%;
+        min-width: 240px;
+        max-width: 300px;
       }
       canvas {
         display: block;
@@ -96,6 +99,7 @@
         margin: 20px auto;
         border: 1px solid #ccc;
         background: #fafafa;
+        border: none;
       }
       @media (max-width: 600px) {
         table, thead, tbody, th, td, tr {
@@ -110,17 +114,10 @@
         tr {
           margin-bottom: 10px;
         }
-        input[type="submit"] {
+        input {
           width: 100%;
           min-width: 120px;
           max-width: 180px;
-          height: 50px;
-        }
-        #customLabel {
-          width: 100%;
-          min-width: 120px;
-          max-width: 180px;
-          height: 50px;
         }
         canvas {
           width: 100vw !important;
@@ -141,7 +138,9 @@
       <form id="index" action="" method="post">
         <tr>
           <td>
-            <input type="submit" name="process" value="手入力">
+            <div class="centered-container">	
+              <input type="submit" name="process" value="手入力">
+            </div>
           </td>
         </tr>
       </form>
@@ -150,7 +149,7 @@
           <td>
             <div class="centered-container">			
               <label for="npimage" id="customLabel">
-                画像をアップロードしてください
+                画像入力
               </label>
               <input type="file" id="npimage" capture="environment" accept="image/*" style="display:none;">			
             </div>
@@ -167,11 +166,11 @@
 
 		if (navigator.userAgentData) {
 			if (navigator.userAgentData.mobile) {
-				label.textContent = 'カメラで撮影してください';
+				label.textContent = '画像入力（カメラ撮影）';
 				console.log("Mobile device detected (userAgentData)");
 				// スマホ向け処理
 			} else {
-				 label.textContent = '画像ファイルを選択してください';
+				 label.textContent = '画像入力（ファイル選択）';
 				console.log("Desktop device detected (userAgentData)");
 				// PC向け処理
 			}
@@ -187,7 +186,7 @@
 		}
 
     var form = document.getElementById('index');
-		var hiddenInput = document.createElement('input');
+
 
 		const canvas = document.getElementById('canvas');
 		const context = canvas.getContext('2d');
@@ -195,12 +194,10 @@
 		form.method = 'POST';
 		form.action = '';
 	
-		hiddenInput.type = 'hidden'; //入力フォームが表示されないように
-		hiddenInput.name = 'process';
-    hiddenInput.value = '画像入力';
-    form.appendChild(hiddenInput);
 
-    const request = document.createElement('input');
+
+
+    var hiddenInput = document.createElement('input');
 		// input要素
 		const fileInput = document.getElementById('npimage');
 
@@ -234,11 +231,20 @@
 
 			context.drawImage(img, 0, 0, canvas.width, canvas.height);
 			const base64_img = canvas.toDataURL("image/jpeg");
-			request.value = base64_img;
+
+      const request = document.createElement('input');
       request.type = 'hidden'; //入力フォームが表示されないように
-      request.name = 'image';      
+      request.name = 'image';
+      request.value = base64_img;
 			form.appendChild(request);
+
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden'; //入力フォームが表示されないように
+      hiddenInput.name = 'process'; 
+      hiddenInput.value = '画像入力';
+      form.appendChild(hiddenInput);
 			document.body.appendChild(form);
+
 			form.submit();
 		}
 		// ファイル選択時にhandleFileSelectを発火
