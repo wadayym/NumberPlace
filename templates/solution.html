@@ -36,9 +36,6 @@
         margin: auto;
         background-color: transparent; /* ← 透明にする */
       }
-      td {
-        background-color: transparent; /* ← 透明にする */
-      }
       input[type="submit"] {
         width: 100%;
         min-width: 120px;
@@ -70,9 +67,8 @@
 <body>
 <div class="background-layer"></div>
 <div class="container">
-  <h1>Number Place</h1>
+  <h1 style="font-size: 20px;">Number Place</h1>
   <p>解答</p>
-
 	<div>
 	<table> 
 		
@@ -84,14 +80,14 @@
 	{%for j in range(9)%} 
 
 	{% if ((i//3 + j//3) % 2) == 0 %}
-		<td align="center" valign="middle" bgcolor="#dddddd" style="padding: 8px;">
+		<td style="text-align: center; vertical-align: middle; padding: 8px; background-color: rgba(200, 200, 200, 0.7);">
 		{% if IN_Table[i][j] == 0 %}
 			{{NP_Table[i][j]}}</td> 
 		{% else %}
 			<b>{{NP_Table[i][j]}}</b></td> 
 		{% endif %}
 	{% else %}
-		<td align="center" valign="middle" bgcolor="#ffffff" style="padding: 8px;">
+		<td style="text-align: center; vertical-align: middle; padding: 8px; background-color: rgba(255, 255, 255, 0.7);">
 		{% if IN_Table[i][j] == 0 %}
 			{{NP_Table[i][j]}}</td> 
 		{% else %}
@@ -106,6 +102,5 @@
 
 	</table> 
 	</div>
-
 </body> 
 </html>
