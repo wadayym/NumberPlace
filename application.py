@@ -57,10 +57,6 @@ class ProcessSettings:
         nparr = np.frombuffer(code, np.uint8)
         image_decoded = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         cv2.imwrite(self.filename_input, image_decoded)
-
-    def process(self):
-
-        return True
     
 ps = ProcessSettings()
 PlaceName = [['00'] * 9 for i in range(9)]
@@ -78,7 +74,8 @@ def index():
             return redirect('/numberplace')
 
         if ps.get_process_name() == "画像入力":
-            return render_template('camera.html')
+            ps.save_capture_image()
+            return redirect('/result')
         
     return render_template('index.html')
 
@@ -115,7 +112,6 @@ def capture():
 @app.route('/result')
 def result():
     start_time = time.perf_counter()
-    # ここで処理する
     outTable, inTable = subOCR.find_square(ps.get_filename_input(), ps.get_filename_result(), ps.get_filename_work())
     current_time = time.perf_counter()
     print("processing time = {:.3f}sec".format(current_time - start_time))
