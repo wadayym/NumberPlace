@@ -80,6 +80,7 @@
         border-radius: 5px;
         cursor: pointer;
         opacity: 1.0;
+        z-index: 1000;
       }
       .back-to-home {
         position: fixed;
@@ -90,13 +91,12 @@
         padding: 10px;
         border-radius: 5px;
         text-decoration: none;
-        font-weight: bold;
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         z-index: 1000;
         transition: background-color 0.3s ease;
       }
       .back-to-home:hover {
-        background-color: #005A9E;
+        background-color: #AABBCC;
       }
       @media (max-width: 600px) {
         .container {
@@ -146,8 +146,8 @@
 
 <body>
 <div class="background-layer"></div>
-<a href="/" class="back-to-home">最初に戻る</a>
 <div class="container">
+  <a href="/" class="back-to-home">最初に戻る</a>
   <h1 style="font-size: 20px;">Number Place</h1>
   <p>タップして数字を選択してください。(0は空欄)</p>
   <p>解くボタンを押すと、解答が表示されます。</p>
