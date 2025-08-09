@@ -61,7 +61,10 @@
         height: 40px;
       }
       select {
+        text-align: center;         /* テキストを中央揃え */
+        text-align-last: center;  
         cursor: pointer;
+        width: 100%; 
         padding: 4px;
         font-size: 16px;
         border-radius: 4px;
@@ -81,6 +84,9 @@
         cursor: pointer;
         opacity: 1.0;
         z-index: 1000;
+      }
+      input:hover {
+        background-color: #AABBCC;
       }
       .back-to-home {
         position: fixed;

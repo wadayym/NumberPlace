@@ -70,6 +70,7 @@
         min-width: 240px;
         max-width: 300px;
       }
+
       /* コンテナのスタイル */
       .centered-container {
         display: flex;
@@ -78,8 +79,8 @@
         flex-direction: column;
         margin: 20px auto;
       }
-      /* カスタムラベルのスタイル */
-      #customLabel {
+      /* ラベルのスタイル */
+      label {
         display: inline-block;
         padding: 10px;
         font-size: 16px;
@@ -91,6 +92,9 @@
         width: 100%;
         min-width: 240px;
         max-width: 300px;
+      }
+      label:hover {
+        background-color: #AABBCC;
       }
       canvas {
         display: block;
@@ -139,7 +143,10 @@
         <tr>
           <td>
             <div class="centered-container">	
-              <input type="submit" name="process" value="手入力">
+              <label for="nptable" id="nptableLabel">
+                手入力
+              </label>
+              <input type="submit" id="nptable" name="process" value="手入力" style="display:none;">
             </div>
           </td>
         </tr>
@@ -164,15 +171,7 @@
 	<script>
     var form = document.getElementById('index');
 
-    window.addEventListener('pageshow', function (event) {
-      // JavaScriptで追加された hidden input を削除
-      const hiddenInputs = form.querySelectorAll('input[type="hidden"]');
-      hiddenInputs.forEach(input => {
-        if (input.dataset.dynamic === 'true') {
-          input.remove();
-        }
-      });
-    });
+
 
 		const label = document.getElementById('customLabel');
 
@@ -203,11 +202,20 @@
 		form.method = 'POST';
 		form.action = '';
 
-    var hiddenInput = document.createElement('input');
 		// input要素
 		const fileInput = document.getElementById('npimage');
 
 		var img = new Image();
+
+    window.addEventListener('pageshow', function (event) {
+      // JavaScriptで追加された hidden input を削除
+      const hiddenInputs = form.querySelectorAll('input[type="hidden"]');
+      hiddenInputs.forEach(input => {
+        if (input.dataset.dynamic === 'true') {
+          input.remove();
+        }
+      });
+    });
 
 		// changeイベントで呼び出す関数
 		const handleFileSelect = () => {
