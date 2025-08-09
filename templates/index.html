@@ -92,6 +92,10 @@
         width: 100%;
         min-width: 240px;
         max-width: 300px;
+        text-decoration: none;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        z-index: 1000;
+        transition: background-color 0.3s ease;
       }
       label:hover {
         background-color: #AABBCC;
@@ -169,9 +173,23 @@
   <canvas id="canvas" width="400" height="400"></canvas>
 	
 	<script>
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted) {
+        // キャッシュから復元された場合のみ初期化
+        resetForm();
+      }
+    });
+    function resetForm() {
+      const form = document.getElementById('index');
+      form.reset(); // ← フォームの初期状態に戻す
+      // 動的に追加された要素を削除
+      const dynamicInputs = form.querySelectorAll('input[data-dynamic="true"]');
+      dynamicInputs.forEach(input => input.remove());
+    }
+
     var form = document.getElementById('index');
-
-
+		form.method = 'POST';
+		form.action = '';
 
 		const label = document.getElementById('customLabel');
 
@@ -199,23 +217,10 @@
     const canvas = document.getElementById('canvas');
 		const context = canvas.getContext('2d');
 
-		form.method = 'POST';
-		form.action = '';
-
 		// input要素
 		const fileInput = document.getElementById('npimage');
 
 		var img = new Image();
-
-    window.addEventListener('pageshow', function (event) {
-      // JavaScriptで追加された hidden input を削除
-      const hiddenInputs = form.querySelectorAll('input[type="hidden"]');
-      hiddenInputs.forEach(input => {
-        if (input.dataset.dynamic === 'true') {
-          input.remove();
-        }
-      });
-    });
 
 		// changeイベントで呼び出す関数
 		const handleFileSelect = () => {
