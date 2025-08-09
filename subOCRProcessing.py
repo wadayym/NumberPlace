@@ -54,6 +54,14 @@ def find_square(s_file, r_file, w_file):
             else:
                 cv2.putText(tile_image, str(result_table[j][i]), tuple([i*70+50, j*70+65]), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (128, 0, 0), 3)
     cv2.imwrite(r_file, tile_image)
+    
+    color = (0, 255, 0)
+    for j in range(10):
+        for i in range(10):
+            if j < 9:
+                cv2.line(imgTrandformed, cross_points[j][i], cross_points[j+1][i], color, thickness=1, lineType=cv2.LINE_AA, shift=0)
+            if i < 9:
+                cv2.line(imgTrandformed, cross_points[j][i], cross_points[j][i+1], color, thickness=1, lineType=cv2.LINE_AA, shift=0)
     cv2.imwrite(w_file, imgTrandformed)
 
     print("Processing completed. Result saved to:", r_file)
