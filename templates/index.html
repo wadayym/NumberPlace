@@ -139,7 +139,10 @@
         <tr>
           <td>
             <div class="centered-container">	
-              <input type="submit" name="process" value="手入力">
+              <label for="npimage" id="customLabel">
+                手入力
+              </label>
+              <input type="submit" name="process" value="手入力" style="display:none;">
             </div>
           </td>
         </tr>
@@ -162,6 +165,18 @@
   <canvas id="canvas" width="400" height="400"></canvas>
 	
 	<script>
+    var form = document.getElementById('index');
+
+    window.addEventListener('pageshow', function (event) {
+      // JavaScriptで追加された hidden input を削除
+      const hiddenInputs = form.querySelectorAll('input[type="hidden"]');
+      hiddenInputs.forEach(input => {
+        if (input.dataset.dynamic === 'true') {
+          input.remove();
+        }
+      });
+    });
+
 		const label = document.getElementById('customLabel');
 
 		if (navigator.userAgentData) {
@@ -185,17 +200,11 @@
 			// PC向け処理
 		}
 
-    var form = document.getElementById('index');
-
-
-		const canvas = document.getElementById('canvas');
+    const canvas = document.getElementById('canvas');
 		const context = canvas.getContext('2d');
 
 		form.method = 'POST';
 		form.action = '';
-	
-
-
 
     var hiddenInput = document.createElement('input');
 		// input要素
@@ -236,13 +245,16 @@
       request.type = 'hidden'; //入力フォームが表示されないように
       request.name = 'image';
       request.value = base64_img;
+      request.dataset.dynamic = 'true';
 			form.appendChild(request);
 
       const hiddenInput = document.createElement('input');
       hiddenInput.type = 'hidden'; //入力フォームが表示されないように
       hiddenInput.name = 'process'; 
       hiddenInput.value = '画像入力';
+      hiddenInput.dataset.dynamic = 'true';
       form.appendChild(hiddenInput);
+
 			document.body.appendChild(form);
 
 			form.submit();

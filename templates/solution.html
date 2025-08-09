@@ -43,6 +43,23 @@
         height: 40px;
         font-size: 1rem;
       }
+      .back-to-home {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        color: #333;
+        background-color: #DDEEFF;
+        padding: 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        z-index: 1000;
+        transition: background-color 0.3s ease;
+      }
+      .back-to-home:hover {
+        background-color: #005A9E;
+      }
       @media (max-width: 600px) {
         .container {
           max-width: 100%;
@@ -66,6 +83,7 @@
 
 <body>
 <div class="background-layer"></div>
+<a href="/" class="back-to-home">最初に戻る</a>
 <div class="container">
   <h1 style="font-size: 20px;">Number Place</h1>
   <p>解答</p>
