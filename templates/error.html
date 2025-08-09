@@ -25,6 +25,12 @@
         opacity: 0.3; /* ← ここで背景を薄く */
         z-index: 0;
       }
+      .foreground-image {
+        position: relative; /* または absolute でもOK */
+        z-index: 1; /* 背景より手前に表示 */
+        max-width: 100%;
+        height: auto;
+      }
       .container {
         max-width: 800px;
         margin: 0 auto;
@@ -37,7 +43,6 @@
         margin: 0 auto;
         border: 1px solid #ccc;
         background: #fafafa;
-        z-index: 1000;
       }
       .back-to-home {
         position: fixed;
@@ -75,7 +80,7 @@
       <p>エラーが発生しました。</p>
       {% endif %}
       {% if work_file %}
-      <p><img src="{{ work_file }}"></p>
+      <p><img src="{{ work_file }}" class="foreground-image"></p>
       {% endif %}
     </div>
   </div>
