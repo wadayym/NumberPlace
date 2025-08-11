@@ -26,13 +26,6 @@ class ProcessSettings:
         self.filename_result = ""
         self.filename_work = ""
     
-    def set(self):
-        print("process name:"+request.form['process'])
-        self.process_name = request.form['process']
-
-    def get_process_name(self):
-        return self.process_name
-    
     def get_filename_input(self):
         return self.filename_input
     
@@ -44,9 +37,9 @@ class ProcessSettings:
     
     def save_capture_image(self):
         filename = os.path.join(app.config['UPLOADED_PATH'], datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
-        self.filename_input = filename + '_input.jpg'
+        self.filename_input  = filename + '_input.jpg'
         self.filename_result = filename + '_result.png'
-        self.filename_work = filename + '_work.png'
+        self.filename_work   = filename + '_work.png'
         base64_img = request.form['image']
         #print(type(base64_png))
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -55,8 +48,8 @@ class ProcessSettings:
             return
         print("type & size of base64_img:"+str(type(base64_img))+", "+str(sys.getsizeof(base64_img)))
         code = base64.b64decode(base64_img.split(',')[1])  # remove header 
-        nparr = np.frombuffer(code, np.uint8)
-        image_decoded = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        nparray = np.frombuffer(code, np.uint8)
+        image_decoded = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
         cv2.imwrite(self.filename_input, image_decoded)
     
 ps = ProcessSettings()
@@ -70,12 +63,11 @@ def index():
     ac = request.endpoint
     print("endpoint:"+ac)
     if request.method == 'POST': 
-        ps.set()
-        if ps.get_process_name() =='手入力':
+        if request.form['process'] =='手入力':
             print("process:"+"手入力")
             return redirect('/numberplace')
 
-        if ps.get_process_name() == "画像入力":
+        if request.form['process'] == "画像入力":
             print("process:"+"画像入力")
             ps.save_capture_image()
             return redirect('/result')
@@ -87,7 +79,7 @@ def numberplace():
     return render_template('numberplace.html', PlaceName = PlaceName)
 
 @app.route('/solution', methods=['GET', 'POST'])
-def send():
+def solution():
     if request.method == 'POST':
         NPClass = subNP.NumberPlace()
         for i in range(9):
