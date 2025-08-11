@@ -53,8 +53,12 @@ def find_square(s_file, r_file, w_file):
                 cv2.putText(tile_image, str(result_table[j][i]), tuple([i*70+17, j*70+55]), cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 64, 0), 5)
             else:
                 cv2.putText(tile_image, str(result_table[j][i]), tuple([i*70+50, j*70+65]), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (128, 0, 0), 3)
-    cv2.imwrite(r_file, tile_image)
-    
+    cv2.imwrite(r_file, tile_image)    
+
+    for j in range(10):
+        for i in range(10):
+            blended = cv2.addWeighted(imgTrandformed[j*64+15:j*64+49, i*64+15:i*64+49], 0.7, candidates_img[i,j], 0.3, 0)
+            imgTrandformed[j*64+15:j*64+49, i*64+15:i*64+49] =blended
     color = (0, 255, 0)
     for j in range(10):
         for i in range(10):
@@ -62,6 +66,10 @@ def find_square(s_file, r_file, w_file):
                 cv2.line(imgTrandformed, cross_points[j][i], cross_points[j+1][i], color, thickness=1, lineType=cv2.LINE_AA, shift=0)
             if i < 9:
                 cv2.line(imgTrandformed, cross_points[j][i], cross_points[j][i+1], color, thickness=1, lineType=cv2.LINE_AA, shift=0)
+    for j in range(9):
+        for i in range(9):
+            if input_table[j][i] != 0:
+                cv2.putText(imgTrandformed, str(input_table[j][i]), tuple([i*64+64, j*64+64]), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (128, 0, 0), 3)             
     cv2.imwrite(w_file, imgTrandformed)
 
     print("Processing completed. Result saved to:", r_file)

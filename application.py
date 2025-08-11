@@ -115,6 +115,14 @@ def result():
         print("Processing failed. Result contains zero.")
         return render_template('error.html', message="解けませんでした。", work_file=ps.get_filename_work())
     print("Processing completed successfully.")
+
+    os.remove(ps.get_filename_input())
+    print(f"{ps.get_filename_input()} を削除しました。")
+    os.remove(ps.get_filename_result())
+    print(f"{ps.get_filename_result()} を削除しました。")
+    os.remove(ps.get_filename_work())
+    print(f"{ps.get_filename_work()} を削除しました。")
+    
     return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable)
 
 if __name__ == '__main__':
