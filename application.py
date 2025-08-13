@@ -18,41 +18,12 @@ app.config.update(
     UPLOADED_PATH='./uploads'
 )
 
-class ProcessSettings:
-    def __init__(self):
-        self.process_name = ""
+filenames = {
+    "input" : "",
+    "result": "",
+    "work"  : ""
+}
 
-        self.filename_input = ""
-        self.filename_result = ""
-        self.filename_work = ""
-    
-    def get_filename_input(self):
-        return self.filename_input
-    
-    def get_filename_result(self):
-        return self.filename_result
-    
-    def get_filename_work(self):
-        return self.filename_work
-    
-    def save_capture_image(self):
-        filename = os.path.join(app.config['UPLOADED_PATH'], datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
-        self.filename_input  = filename + '_input.jpg'
-        self.filename_result = filename + '_result.png'
-        self.filename_work   = filename + '_work.png'
-        base64_img = request.form['image']
-        #print(type(base64_png))
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        if not base64_img.startswith('data:image/jpeg;base64,'):
-            print("Invalid base64 image format")
-            return
-        print("type & size of base64_img:"+str(type(base64_img))+", "+str(sys.getsizeof(base64_img)))
-        code = base64.b64decode(base64_img.split(',')[1])  # remove header 
-        nparray = np.frombuffer(code, np.uint8)
-        image_decoded = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
-        cv2.imwrite(self.filename_input, image_decoded)
-    
-ps = ProcessSettings()
 PlaceName = [['00'] * 9 for i in range(9)]
 for i in range(9):
     for j in range(9):
@@ -69,7 +40,21 @@ def index():
 
         if request.form['process'] == "画像入力":
             print("process:"+"画像入力")
-            ps.save_capture_image()
+            filename = os.path.join(app.config['UPLOADED_PATH'], datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
+            filenames['input']  = filename + '_input.jpg'
+            filenames['result'] = filename + '_result.png'
+            filenames['work']   = filename + '_work.png'
+            base64_img = request.form['image']
+            print("type & size of base64_img:"+str(type(base64_img))+", "+str(sys.getsizeof(base64_img)))
+            if not base64_img.startswith('data:image/jpeg;base64,'):
+                print("Invalid base64 image format")
+                return render_template('error.html', message="エラーが発生しました。画像の形式が正しくありません。")
+            print("base64_img:"+base64_img[:100]+"...")
+            code = base64.b64decode(base64_img.split(',')[1])  # remove header 
+            nparray = np.frombuffer(code, np.uint8)
+            image_decoded = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
+            cv2.imwrite(filenames['input'], image_decoded)
+
             return redirect('/result')
         
     return render_template('index.html')
@@ -100,20 +85,20 @@ def uploaded_file(filename):
 @app.route('/result')
 def result():
     start_time = time.perf_counter()
-    outTable, inTable = subOCR.find_square(ps.get_filename_input(), ps.get_filename_result(), ps.get_filename_work())
+    outTable, inTable = subOCR.find_square(filenames['input' ], filenames['result'], filename_work)
     current_time = time.perf_counter()
     print("processing time = {:.3f}sec".format(current_time - start_time))
     if 0 in outTable:
         print("Processing failed. Result contains zero.")
-        return render_template('error.html', message="解けませんでした。", work_file=ps.get_filename_work())
+        return render_template('error.html', message="解けませんでした。", work_file=filenames['work'])
     print("Processing completed successfully.")
 
-    os.remove(ps.get_filename_input())
-    print(f"{ps.get_filename_input()} を削除しました。")
-    os.remove(ps.get_filename_result())
-    print(f"{ps.get_filename_result()} を削除しました。")
-    os.remove(ps.get_filename_work())
-    print(f"{ps.get_filename_work()} を削除しました。")
+    os.remove(filenames['input'])
+    print(f"{filenames['input']} を削除しました。")
+    os.remove(filenames['result'])
+    print(f"{filenames['result']} を削除しました。")
+    os.remove(filenames['work'])
+    print(f"{filenames['work']} を削除しました。")
     
     return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable)
 
