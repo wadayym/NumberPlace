@@ -18,11 +18,41 @@ app.config.update(
     UPLOADED_PATH='./uploads'
 )
 
-if not os.path.exists(app.config['UPLOADED_PATH']):
-    os.makedirs(app.config['UPLOADED_PATH'])
-    print('Created directory: ' + app.config['UPLOADED_PATH'])
+class ProcessSettings:
+    def __init__(self):
+        self.process_name = ""
 
-# Initialize PlaceName with 9x9 grid of strings
+        self.filename_input = ""
+        self.filename_result = ""
+        self.filename_work = ""
+    
+    def get_filename_input(self):
+        return self.filename_input
+    
+    def get_filename_result(self):
+        return self.filename_result
+    
+    def get_filename_work(self):
+        return self.filename_work
+    
+    def save_capture_image(self):
+        filename = os.path.join(app.config['UPLOADED_PATH'], datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
+        self.filename_input  = filename + '_input.jpg'
+        self.filename_result = filename + '_result.png'
+        self.filename_work   = filename + '_work.png'
+        base64_img = request.form['image']
+        #print(type(base64_png))
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        if not base64_img.startswith('data:image/jpeg;base64,'):
+            print("Invalid base64 image format")
+            return
+        print("type & size of base64_img:"+str(type(base64_img))+", "+str(sys.getsizeof(base64_img)))
+        code = base64.b64decode(base64_img.split(',')[1])  # remove header 
+        nparray = np.frombuffer(code, np.uint8)
+        image_decoded = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
+        cv2.imwrite(self.filename_input, image_decoded)
+    
+ps = ProcessSettings()
 PlaceName = [['00'] * 9 for i in range(9)]
 for i in range(9):
     for j in range(9):
@@ -39,6 +69,7 @@ def index():
 
         if request.form['process'] == "画像入力":
             print("process:"+"画像入力")
+            ps.save_capture_image()
             return redirect('/result')
         
     return render_template('index.html')
@@ -68,37 +99,21 @@ def uploaded_file(filename):
 
 @app.route('/result')
 def result():
-    filename = os.path.join(app.config['UPLOADED_PATH'], datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
-    filename_input = filename + '_input.jpg'
-    filename_result = filename + '_result.png'
-    filename_work = filename + '_work.png'
-
-    base64_img = request.form['image']
-    if not base64_img.startswith('data:image/jpeg;base64,'):
-        print("Invalid base64 image format")
-        return  render_template('error.html', message="エラーが発生しました。")
-    print("type & size of base64_img:"+str(type(base64_img))+", "+str(sys.getsizeof(base64_img)))
-    code = base64.b64decode(base64_img.split(',')[1])  # remove header 
-    nparray = np.frombuffer(code, np.uint8)
-    image_decoded = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
-    cv2.imwrite(filename_input, image_decoded)
-
     start_time = time.perf_counter()
-    outTable, inTable = subOCR.find_square(filename_input, filename_result, filename_work)
+    outTable, inTable = subOCR.find_square(ps.get_filename_input(), ps.get_filename_result(), ps.get_filename_work())
     current_time = time.perf_counter()
     print("processing time = {:.3f}sec".format(current_time - start_time))
-
     if 0 in outTable:
         print("Processing failed. Result contains zero.")
-        return render_template('error.html', message="解けませんでした。", work_file=filename_work)
-    
+        return render_template('error.html', message="解けませんでした。", work_file=ps.get_filename_work())
     print("Processing completed successfully.")
-    os.remove(filename_input)
-    print(f"{filename_input} を削除しました。")
-    os.remove(filename_result)
-    print(f"{filename_result} を削除しました。")
-    os.remove(filename_work)
-    print(f"{filename_work} を削除しました。")
+
+    os.remove(ps.get_filename_input())
+    print(f"{ps.get_filename_input()} を削除しました。")
+    os.remove(ps.get_filename_result())
+    print(f"{ps.get_filename_result()} を削除しました。")
+    os.remove(ps.get_filename_work())
+    print(f"{ps.get_filename_work()} を削除しました。")
     
     return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable)
 
