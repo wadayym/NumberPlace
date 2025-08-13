@@ -85,7 +85,7 @@ def uploaded_file(filename):
 @app.route('/result')
 def result():
     start_time = time.perf_counter()
-    outTable, inTable = subOCR.find_square(filenames['input' ], filenames['result'], filename_work)
+    outTable, inTable = subOCR.find_square(filenames['input' ], filenames['result'], filenames['work'])
     current_time = time.perf_counter()
     print("processing time = {:.3f}sec".format(current_time - start_time))
     if 0 in outTable:
