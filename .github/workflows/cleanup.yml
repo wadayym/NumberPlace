@@ -14,7 +14,8 @@ jobs:
         uses: c-hive/gha-remove-artifacts@v1
         with:
           age: '3 days'
-          token: ${{ github.token }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Delete caches
         uses: easimon/wipe-cache@main
