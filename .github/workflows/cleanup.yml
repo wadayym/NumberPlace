@@ -8,6 +8,11 @@ on:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+      issues: write
+      pull-requests: write
 
     steps:
       - name: Delete old artifacts
