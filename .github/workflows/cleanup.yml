@@ -14,16 +14,16 @@ jobs:
         uses: c-hive/gha-remove-artifacts@v1
         with:
           age: '3 days'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
 
       - name: Delete caches
         uses: easimon/wipe-cache@main
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ github.token }}
           dry-run: 'false'
 
       - name: Delete workflow logs
         uses: Mattraks/delete-workflow-runs@v2
         with:
           retain_days: 3
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
