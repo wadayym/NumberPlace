@@ -1,4 +1,5 @@
 #!/bin/sh
+sudo apt update && sudo apt install libxcb1
 #!python -m pip install -r requirements.txt
 #!python -m pip show Pillow
 #!python -c "import PIL; print(PIL.__version__)"
