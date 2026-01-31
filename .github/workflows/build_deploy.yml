@@ -25,11 +25,11 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: '3.11'
 
       - name: Create and start virtual environment
         run: |
-          python3.12 -m venv venv
+          python3.11 -m venv venv
           source venv/bin/activate
 
       - name: Upgrade pip and build tools
