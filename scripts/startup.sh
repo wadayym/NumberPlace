@@ -1,3 +1,3 @@
 #!/bin/sh
 python -m pip install -r requirements.txt
-gunicorn --bind=0.0.0.0 --timeout 600 application:app || sleep infinity
+gunicorn application:app --bind=0.0.0.0:8000 --timeout 600 || sleep infinity
