@@ -31,6 +31,11 @@ jobs:
         run: |
           python3.12 -m venv venv
           source venv/bin/activate
+
+      - name: Upgrade pip and build tools
+        run: |
+          source venv/bin/activate
+          pip install --upgrade pip setuptools wheel packaging
       
       - name: Install dependencies
         run: pip install -r requirements.txt
