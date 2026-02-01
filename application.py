@@ -103,9 +103,9 @@ def result():
     return render_template('solution.html', PlaceName = PlaceName, IN_Table = inTable, NP_Table = outTable)
 
 if __name__ == '__main__':
-    for p in glob.glob(app.config['UPLOADED_PATH']+'/**', recursive=True):
-        if os.path.isfile(p):
+    #for p in glob.glob(app.config['UPLOADED_PATH']+'/**', recursive=True):
+        #if os.path.isfile(p):
             #os.remove(p)
             #print('not removed : '+p)
-            pass
-    app.run(debug=True)    
+            #pass
+    app.run(host="0.0.0.0", port=8000, debug=True)    
