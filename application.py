@@ -29,10 +29,6 @@ for i in range(9):
     for j in range(9):
         PlaceName[i][j] = str(i * 10 + j)
 
-@app.route('/', methods=['GET'])
-def index():
-    return "OK"
-'''
 @app.route('/', methods=['POST', 'GET'])
 def index():
     ac = request.endpoint
@@ -62,7 +58,7 @@ def index():
             return redirect('/result')
         
     return render_template('index.html')
-'''
+
 @app.route('/numberplace', methods=['POST', 'GET'])
 def numberplace():
     return render_template('numberplace.html', PlaceName = PlaceName)
