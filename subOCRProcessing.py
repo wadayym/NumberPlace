@@ -7,6 +7,11 @@ import subNumberPlace as subNP
 import subONNX as subOnnx
 
 def find_square(s_file, r_file, w_file):
+    number_table = np.zeros((9, 9), dtype=np.int32)
+    value_table = np.zeros((9, 9), dtype=np.float32)
+    number_table2 = np.zeros((9, 9), dtype=np.int32)
+    value_table2 = np.zeros((9, 9), dtype=np.float32)
+
     IPClass = subIP.ImageProcess(s_file)
 
     # 輪郭の抽出
@@ -40,13 +45,59 @@ def find_square(s_file, r_file, w_file):
             im = cv2.bitwise_not(im)
             # ONNXモデルで推論
             max_idx, max_value, second_idx, second_value = ONNXClass.predict(im)
-            NPClass.set(j, i, max_idx, max_value, second_idx, second_value)
+            number_table[j][i] = max_idx
+            value_table[j][i] = max_value
+            number_table2[j][i] = second_idx
+            value_table2[j][i] = second_value
             # タイル状画像に配置
             tile_image[j*70+3:(j+1)*70-3, i*70+3:(i+1)*70-3] = gridImages[i,j]
 
+    result_table, input_table = NPClass.set(number_table)
+
+    if np.any(result_table == 0):
+        print("ゼロサプレスを実行")
+        # 30未満の値を0に置き換える
+        indices = np.where(value_table < 30)        
+        number_table[indices] = 0
+        result_table, input_table = NPClass.set(number_table)
+
+    if np.any(result_table == 0):
+        # 第一候補と第二候補の評価値の比が1.5未満の値を第二候補のインデックスに置き換える
+        ratio_table = value_table / (value_table2 + 1e-6)  # ゼロ割り防止のために小さな値を加算
+        threshold = 1.5
+        mask = ratio_table <= threshold
+        # マスクされた値を1次元化し、argsort
+        flat_idx = np.argsort(ratio_table[mask])
+
+        # マスクされた部分の元の2次元インデックス
+        rows, cols = np.where(mask)
+
+        # 小さい順に並べ替えた2次元インデックス
+        sorted_rows = rows[flat_idx]
+        sorted_cols = cols[flat_idx]
+        target_rows = []
+        target_cols = []
+        for i in range(len(sorted_rows)):
+            r = sorted_rows[i]
+            c = sorted_cols[i]
+            if number_table[r][c] == 0:
+                continue  # すでにゼロになっている場合はスキップ
+            target_rows.append(r)
+            target_cols.append(c)
+        n = len(target_rows)
+        if n > 0:
+            print("第二候補との入れ替えを実行")
+            for mask in range(1, 2**n):
+                B = number_table.copy()
+                for bit in range(n):
+                    if (mask >> bit) & 1:
+                        r, c = target_rows[bit], target_cols[bit]
+                        B[r, c] = number_table2[r, c]
+                result_table, input_table = NPClass.set(B)
+                if not np.any(result_table == 0):
+                    break            
+
     # タイル状画像を描画
-    NPClass.check_all()
-    result_table, input_table, value_table, number_table2, value_table2 = NPClass.get()
     for j in range(9):
         for i in range(9):
             if input_table[j][i] == 0:

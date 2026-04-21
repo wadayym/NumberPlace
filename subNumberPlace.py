@@ -3,18 +3,11 @@ import numpy as np
 class NumberPlace:
     def __init__(self):
         self.number_table = np.zeros((9, 9), dtype=np.int32)
-        self.value_table = np.zeros((9, 9), dtype=np.float32)
-        self.number_table2 = np.zeros((9, 9), dtype=np.int32)
-        self.value_table2 = np.zeros((9, 9), dtype=np.float32)
 
-    def set(self, i, j, idx, max_value, second_idx, second_value): 
-        self.number_table[i][j] = idx
-        self.value_table[i][j] = max_value
-        self.number_table2[i][j] = second_idx
-        self.value_table2[i][j] = second_value
-
-    def get(self): 
-        return self.number_table, self.input_table, self.value_table, self.number_table2, self.value_table2
+    def set(self, number_table): 
+        self.number_table = number_table
+        self.check_all()
+        return self.number_table, self.input_table
     
     def pre_check(self):
         for i in range(9):

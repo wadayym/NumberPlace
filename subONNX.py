@@ -24,11 +24,10 @@ class Onnx:
         out_onnx = self.ort_session.run([self.output_name], {self.input_name: input_onnx})
         out = out_onnx[0][0]
         #print(out)
-        # 確率を昇順にソートする
+        # 最も大きい値のインデックスと値を取得
         max_value = np.max(out)
         max_idx = np.argmax(out)
-        if max_value < 30.0:
-            max_idx = 0 
-        second_idx = np.argsort(out)[-2]   # 2番目に大きい値のインデックス
+        # 2番目に大きい値のインデックスと値を取得
+        second_idx = np.argsort(out)[-2]
         second_value = out[second_idx]
         return max_idx, max_value, second_idx, second_value
