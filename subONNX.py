@@ -27,4 +27,6 @@ class Onnx:
         # 確率を昇順にソートする
         max_value = np.max(out)
         max_idx = np.argmax(out)
-        return max_idx, max_value
+        second_idx = np.argsort(out)[-2]   # 2番目に大きい値のインデックス
+        second_value = out[second_idx]
+        return max_idx, max_value, second_idx, second_value

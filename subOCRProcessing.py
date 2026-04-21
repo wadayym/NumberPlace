@@ -39,14 +39,14 @@ def find_square(s_file, r_file, w_file):
             im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
             im = cv2.bitwise_not(im)
             # ONNXモデルで推論
-            max_idx, max_value = ONNXClass.predict(im)
-            NPClass.set(j, i, max_idx)
+            max_idx, max_value, second_idx, second_value = ONNXClass.predict(im)
+            NPClass.set(j, i, max_idx, max_value, second_idx, second_value)
             # タイル状画像に配置
             tile_image[j*70+3:(j+1)*70-3, i*70+3:(i+1)*70-3] = gridImages[i,j]
 
     # タイル状画像を描画
     NPClass.check_all()
-    result_table, input_table = NPClass.get()
+    result_table, input_table, value_table, number_table2, value_table2 = NPClass.get()
     for j in range(9):
         for i in range(9):
             if input_table[j][i] == 0:
@@ -69,7 +69,11 @@ def find_square(s_file, r_file, w_file):
     for j in range(9):
         for i in range(9):
             if input_table[j][i] != 0:
-                cv2.putText(imgTrandformed, str(input_table[j][i]), tuple([i*64+64, j*64+64]), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (128, 0, 0), 3)             
+                cv2.putText(imgTrandformed, str(input_table[j][i]), tuple([i*64+64, j*64+64]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 0, 0), 3) 
+                cv2.putText(imgTrandformed, format(value_table[j][i], ".3f"), tuple([i*64+64, j*64+80]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 128), 3) 
+                cv2.putText(imgTrandformed, str(number_table2[j][i]), tuple([i*64+64, j*64+96]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 0, 0), 3) 
+                cv2.putText(imgTrandformed, format(value_table2[j][i], ".3f"), tuple([i*64+64, j*64+112]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 128), 3) 
+
     cv2.imwrite(w_file, imgTrandformed)
 
     print("Processing completed. Result saved to:", r_file)
