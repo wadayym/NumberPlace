@@ -69,10 +69,10 @@ def find_square(s_file, r_file, w_file):
     for j in range(9):
         for i in range(9):
             if input_table[j][i] != 0:
-                cv2.putText(imgTrandformed, str(input_table[j][i]), tuple([i*64+64, j*64+64]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 0, 0), 3) 
-                cv2.putText(imgTrandformed, format(value_table[j][i], ".3f"), tuple([i*64+64, j*64+80]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 128), 3) 
-                cv2.putText(imgTrandformed, str(number_table2[j][i]), tuple([i*64+64, j*64+96]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 0, 0), 3) 
-                cv2.putText(imgTrandformed, format(value_table2[j][i], ".3f"), tuple([i*64+64, j*64+112]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 128), 3) 
+                cv2.putText(imgTrandformed, str(input_table[j][i]), tuple([i*64+64, j*64+48]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 0, 0), 2) 
+                cv2.putText(imgTrandformed, format(value_table[j][i], ".3f"), tuple([i*64+64, j*64+64]), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 128), 1) 
+                cv2.putText(imgTrandformed, str(number_table2[j][i]), tuple([i*64+64, j*64+80]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 0, 0), 2) 
+                cv2.putText(imgTrandformed, format(value_table2[j][i], ".3f"), tuple([i*64+64, j*64+96]), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 128), 1) 
 
     cv2.imwrite(w_file, imgTrandformed)
 
