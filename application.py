@@ -70,7 +70,7 @@ def solution():
         NPClass = subNP.NumberPlace()
         for i in range(9):
             for j in range(9):
-                number_table[j][i] = int(request.form[PlaceName[i][j]])
+                number_table[i][j] = int(request.form[PlaceName[i][j]])
         outTable, inTable = NPClass.set(number_table)
         if 0 in outTable:
             print("Processing failed. Result contains zero.")
